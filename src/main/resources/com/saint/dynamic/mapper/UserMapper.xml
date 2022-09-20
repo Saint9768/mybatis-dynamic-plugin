@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.saint.dynamic.mapper.UserMapper">
+
+    <resultMap id="myMap" type="com.saint.dynamic.model.UserDTO">
+        <id property="id" column="id"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="operator_id" property="operatorId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.saint.dynamic.model.UserDTO">
+        insert into user(user_name, id_card, age, email, operator_id)
+        values (#{userName}, #{idCard}, #{age}, #{email}, #{operatorId})
+    </insert>
+
+    <insert id="creates" parameterType="com.saint.dynamic.model.UserDTO">
+        insert into
+        user(user_name, id_card, age, email, operator_id)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.userName}, #{i.idCard}, #{i.age}, #{i.email}, #{i.operatorId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.saint.dynamic.model.UserDTO">
+        update user
+        set
+        <trim suffixOverrides=",">
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="idCard != null and idCard !=0">
+                id_card = #{idCard},
+            </if>
+            <if test="age != null and age != 0">
+                age = #{age},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+</mapper>
